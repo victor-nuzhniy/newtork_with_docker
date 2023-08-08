@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "corsheaders",
-    "messages.apps.MessagesConfig",
+    "api.apps.ApiConfig",
 ]
 
 REST_FRAMEWORK = {
@@ -149,3 +149,5 @@ STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "api.models.User"
