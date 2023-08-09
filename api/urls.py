@@ -7,5 +7,5 @@ from .views import RegisterView
 urlpatterns = [
     path("token/", TokenObtainPairView.as_view()),
     path("token/refresh/", TokenRefreshView.as_view()),
-    path("register/", RegisterView.as_view(), name="sign_up"),
+    path("signup/", RegisterView.as_view(), name="sign_up"),
 ]
