@@ -2,11 +2,11 @@
 
 from rest_framework import serializers
 
-from .models import User
+from .models import Like, Post, User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """User serializer class."""
+    """User model serializer class."""
 
     class Meta:
         """Class Meta for User serializer class."""
@@ -22,3 +22,25 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
         return user
+
+
+class PostSerializer(serializers.ModelSerializer):
+    """Post model serializer class."""
+
+    class Meta:
+        """Class Meta for Post serializer class."""
+
+        model = Post
+        fields = "__all__"
+        read_only_fields = ("user", "created_at", "updated_at")
+
+
+class LikeSerializer(serializers.ModelSerializer):
+    """Like model serializer class."""
+
+    class Meta:
+        """Class Meta for Like serializer class."""
+
+        model = Like
+        fields = "__all__"
+        read_only_fields = ("user", "created_at")
