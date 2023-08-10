@@ -140,7 +140,11 @@ class UserActivityView(APIView):
 
     @staticmethod
     def get(request, pk, format=None) -> Response:
-        """Get user last_login and last_request_at data."""
+        """
+        Get user last_login and last_request_at data.
+
+        Path parameter 'pk' - user pk to look activity at.
+        """
         user = User.objects.filter(id=pk).only("last_login", "last_request_at").first()
         if user:
             return Response(

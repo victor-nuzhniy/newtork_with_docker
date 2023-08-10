@@ -2,6 +2,7 @@
 from typing import List
 
 import coreapi
+import coreschema
 from rest_framework.schemas import AutoSchema
 
 user_register_schema = AutoSchema(
@@ -10,16 +11,20 @@ user_register_schema = AutoSchema(
             name="username",
             required=True,
             location="form",
-            description="Username",
+            schema=coreschema.String(description="Username."),
         ),
         coreapi.Field(
             name="email",
             required=True,
             location="form",
+            schema=coreschema.String(description="User email."),
             description="User email",
         ),
         coreapi.Field(
-            name="password", required=True, location="form", description="User password"
+            name="password",
+            required=True,
+            location="form",
+            schema=coreschema.String(description="User password."),
         ),
     ],
 )
@@ -37,7 +42,7 @@ class LikeSchema(AutoSchema):
                 name="message_id",
                 required=True,
                 location="form",
-                description="Message id",
+                schema=coreschema.String(description="Message id."),
             ),
         ]
         if method.lower() == "post":
@@ -46,7 +51,9 @@ class LikeSchema(AutoSchema):
                     name="eval",
                     required=True,
                     location="form",
-                    description="Like value",
+                    schema=coreschema.String(
+                        description="Like value. Can only be 'Like' or 'Dislike'."
+                    ),
                 ),
             ]
         return self._manual_fields + custom_fields
@@ -58,13 +65,13 @@ analitics_schema = AutoSchema(
             name="date_from",
             required=True,
             location="query",
-            description="Date from",
+            schema=coreschema.String(description="Date from. Format '%Y-%m-%d'"),
         ),
         coreapi.Field(
             name="date_to",
             required=True,
             location="query",
-            description="Date to",
+            schema=coreschema.String(description="Date to. Format '%Y-%m-%d'"),
         ),
     ]
 )
