@@ -1,5 +1,5 @@
 """Module for 'api' app model operations."""
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from django.db.models import Count, F, QuerySet
 
@@ -11,7 +11,7 @@ def get_like_instance(user: User, message_id: int) -> QuerySet:
     return Like.objects.filter(user=user, message=message_id)
 
 
-def get_analitic_like_queryset(input_data: Tuple) -> List:
+def get_analitic_like_queryset(input_data: Tuple) -> List[Dict]:
     """Get Like queryset for analitic view and return as a list."""
     date_from, date_to = input_data
     return list(

@@ -23,10 +23,12 @@ def process_date_input(query_params: Dict) -> Optional[Tuple]:
     Return converted values.
     """
     try:
-        date_from = datetime.now(utc).strptime(
+        date_from: datetime = datetime.now(utc).strptime(
             query_params.get("date_from"), "%Y-%m-%d"
         )
-        date_to = datetime.now(utc).strptime(query_params.get("date_to"), "%Y-%m-%d")
+        date_to: datetime = datetime.now(utc).strptime(
+            query_params.get("date_to"), "%Y-%m-%d"
+        )
     except ValueError:
         return None
     return date_from, date_to
