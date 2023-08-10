@@ -12,6 +12,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import Like, Post, User
 from .schemas import LikeSchema, analitics_schema, user_register_schema
 from .serializers import LikeSerializer, PostSerializer, UserSerializer
+from .services.mixins import UpdateRequestFieldMixin
 from .services.model_operations import get_like_instance
 
 
@@ -21,7 +22,7 @@ class RegisterView(APIView):
     schema = user_register_schema
 
     @staticmethod
-    def post(self, request: Request) -> Response:
+    def post(request: Request) -> Response:
         """Post data to create User."""
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -29,7 +30,7 @@ class RegisterView(APIView):
         return Response(serializer.data)
 
 
-class PostCreateView(generics.CreateAPIView):
+class PostCreateView(UpdateRequestFieldMixin, generics.CreateAPIView):
     """Class with only POST method for creating message (post)."""
 
     queryset = Post.objects.all()
@@ -42,7 +43,7 @@ class PostCreateView(generics.CreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class LikeView(APIView):
+class LikeView(UpdateRequestFieldMixin, APIView):
     """Class with only POST method for creating Like with eval = True."""
 
     permission_classes = [IsAuthenticated]
@@ -91,7 +92,7 @@ class LikeView(APIView):
         )
 
 
-class AnaliticView(APIView):
+class AnaliticView(UpdateRequestFieldMixin, APIView):
     """Class for view with like analitic."""
 
     permission_classes = [IsAuthenticated]
