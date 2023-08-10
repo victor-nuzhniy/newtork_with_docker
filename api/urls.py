@@ -2,7 +2,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from .views import LikeView, PostCreateView, RegisterView
+from .views import AnaliticView, LikeView, PostCreateView, RegisterView
 
 urlpatterns = [
     path("token/", TokenObtainPairView.as_view()),
@@ -10,4 +10,5 @@ urlpatterns = [
     path("signup/", RegisterView.as_view(), name="sign_up"),
     path("post/", PostCreateView.as_view(), name="create_post"),
     path("like/", LikeView.as_view(), name="like"),
+    path("analitics/", AnaliticView.as_view(), name="analitics"),
 ]
