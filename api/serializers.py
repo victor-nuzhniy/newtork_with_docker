@@ -42,5 +42,4 @@ class LikeSerializer(serializers.ModelSerializer):
         """Class Meta for Like serializer class."""
 
         model = Like
-        fields = "__all__"
-        read_only_fields = ("user", "created_at")
+        fields = ("user", "message", "eval")
