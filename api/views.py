@@ -2,8 +2,9 @@
 from datetime import datetime
 
 from django.db.models import Count, F
+from pytz import utc
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -108,10 +109,12 @@ class AnaliticView(UpdateRequestFieldMixin, APIView):
         Return list with dates and likes per date in given range.
         """
         try:
-            date_from = datetime.strptime(
+            date_from = datetime.now(utc).strptime(
                 request.query_params.get("date_from"), "%Y-%m-%d"
             )
-            date_to = datetime.strptime(request.query_params.get("date_to"), "%Y-%m-%d")
+            date_to = datetime.now(utc).strptime(
+                request.query_params.get("date_to"), "%Y-%m-%d"
+            )
         except ValueError:
             return Response(
                 {"result": "Invalid input format."},
@@ -127,3 +130,24 @@ class AnaliticView(UpdateRequestFieldMixin, APIView):
         )
 
         return Response({"analitics": list(data)})
+
+
+class UserActivityView(APIView):
+    """Class for fetching user activity data."""
+
+    permission_classes = [IsAdminUser]
+    authentication_classes = [JWTAuthentication]
+
+    @staticmethod
+    def get(request, pk, format=None) -> Response:
+        """Get user last_login and last_request_at data."""
+        user = User.objects.filter(id=pk).only("last_login", "last_request_at").first()
+        if user:
+            return Response(
+                {
+                    "activity": {
+                        "last_login": user.last_login,
+                        "last_request_at": user.last_request_at,
+                    }
+                }
+            )
