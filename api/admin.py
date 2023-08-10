@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from .models import User
+from .models import Like, Post, User
 
 
 class CustomUserAdmin(UserAdmin):
@@ -33,4 +33,20 @@ class CustomUserAdmin(UserAdmin):
     )
 
 
+class PostAdmin(admin.ModelAdmin):
+    """Post model admin site settings."""
+
+    list_display = ("id", "user", "message", "created_at")
+    list_display_links = ("id", "user", "message")
+
+
+class LikeAdmin(admin.ModelAdmin):
+    """Like model admin site settings."""
+
+    list_display = ("id", "user", "message", "eval")
+    list_display_links = ("id", "user", "message")
+
+
 admin.site.register(User, CustomUserAdmin)
+admin.site.register(Post, PostAdmin)
+admin.site.register(Like, LikeAdmin)
