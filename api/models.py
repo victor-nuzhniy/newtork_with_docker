@@ -7,7 +7,7 @@ class User(AbstractUser):
     """Custom User model."""
 
     last_request_at = models.DateTimeField(
-        blank=True, null=True, verbose_name="Last request at"
+        auto_now=True, verbose_name="Last request at"
     )
 
 
