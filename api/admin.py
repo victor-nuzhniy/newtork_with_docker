@@ -11,6 +11,7 @@ class CustomUserAdmin(UserAdmin):
 
     list_display = ("username", "email", "is_staff")
     search_fields = ("username", "email")
+    readonly_fields = ("last_request_at",)
     fieldsets = (
         (None, {"fields": ("username", "last_name", "first_name", "password")}),
         (_("Personal info"), {"fields": ("email",)}),
