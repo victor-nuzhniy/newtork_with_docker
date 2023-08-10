@@ -17,6 +17,7 @@ class RegisterView(APIView):
 
     schema = user_register_schema
 
+    @staticmethod
     def post(self, request: Request) -> Response:
         """Post data to create User."""
         serializer = UserSerializer(data=request.data)
@@ -45,7 +46,8 @@ class LikeView(APIView):
     authentication_classes = [JWTAuthentication]
     schema = LikeSchema()
 
-    def post(self, request, format=None) -> Response:
+    @staticmethod
+    def post(request, format=None) -> Response:
         """
         Create Like instance.
 
@@ -75,7 +77,8 @@ class LikeView(APIView):
         serializer.save()
         return Response(serializer.data)
 
-    def delete(self, request, format=None) -> Response:
+    @staticmethod
+    def delete(request, format=None) -> Response:
         """Delete Like instance."""
         if like := get_like_instance(request.user, request.data.get("message_id")):
             like.delete()
