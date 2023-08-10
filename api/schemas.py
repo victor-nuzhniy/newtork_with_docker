@@ -50,3 +50,21 @@ class LikeSchema(AutoSchema):
                 ),
             ]
         return self._manual_fields + custom_fields
+
+
+analitics_schema = AutoSchema(
+    manual_fields=[
+        coreapi.Field(
+            name="date_from",
+            required=True,
+            location="query",
+            description="Date from",
+        ),
+        coreapi.Field(
+            name="date_to",
+            required=True,
+            location="query",
+            description="Date to",
+        ),
+    ]
+)
