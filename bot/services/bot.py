@@ -5,7 +5,7 @@ from typing import Dict, List
 from faker import Faker
 
 from .config import Config
-from .handlers import create_post, get_user_tokens, register_user
+from .handlers import create_like, create_post, get_user_tokens, register_user
 
 fake = Faker(["en_US"])
 
@@ -59,3 +59,15 @@ class Bot:
             self.post_tasks[index] -= 1
             if self.post_tasks[index] == 0:
                 self.post_tasks.pop(index)
+
+    def perform_like_tasks(self) -> None:
+        """Create likes in accordance with like_tasks list."""
+        while self.like_tasks:
+            index: int = random.choice(list(self.like_tasks.keys()))
+            token: str = self.user_tokens[index].get("access")
+            like: str = random.choice(["Like", "Dislike"])
+            message_id: int = random.choice(self.posts_ids)
+            create_like(token, message_id, like)
+            self.like_tasks[index] -= 1
+            if self.like_tasks[index] == 0:
+                self.like_tasks.pop(index)
