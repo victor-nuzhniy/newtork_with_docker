@@ -42,7 +42,7 @@ class LikeSchema(AutoSchema):
                 name="message_id",
                 required=True,
                 location="form",
-                schema=coreschema.String(description="Message id."),
+                schema=coreschema.Integer(description="Message id."),
             ),
         ]
         if method.lower() == "post":

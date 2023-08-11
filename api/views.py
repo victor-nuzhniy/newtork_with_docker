@@ -74,7 +74,7 @@ class LikeView(UpdateRequestFieldMixin, APIView):
         message_id: int = request.data.get("message_id")
         user: User = request.user
         eval_data: str = request.data.get("eval", "").lower()
-        if like := get_like(eval_data):
+        if (like := get_like(eval_data)) is None:
             return Response(
                 {"result": "Invalid input data."}, status=status.HTTP_406_NOT_ACCEPTABLE
             )
@@ -125,7 +125,7 @@ class AnaliticView(UpdateRequestFieldMixin, APIView):
         Input format - '%Y-%m-%d'.
         Return list with dates and likes per date in given range.
         """
-        if input_data := process_date_input(request.query_params) is None:
+        if (input_data := process_date_input(request.query_params)) is None:
             return Response(
                 {"result": "Invalid input format."},
                 status=status.HTTP_406_NOT_ACCEPTABLE,
