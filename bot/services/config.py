@@ -4,7 +4,7 @@ from __future__ import annotations
 import os.path
 from typing import Any, Dict, Optional
 
-from utils import load_config_data_from_file
+from .utils import load_config_data_from_file
 
 
 class Config:
@@ -22,4 +22,4 @@ class Config:
 
     def get_var(self, name: str) -> Any:
         """Get config value by name."""
-        return self._data.get(name)
+        return self.__dict__.get(name)
