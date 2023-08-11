@@ -73,3 +73,10 @@ class Bot:
             self.like_tasks[index] -= 1
             if self.like_tasks[index] == 0:
                 self.like_tasks.pop(index)
+
+    def run_bot(self) -> None:
+        """Run bot functionality."""
+        self.create_users_and_tasks()
+        self.get_users_tokens()
+        self.perform_post_tasks()
+        self.perform_like_tasks()
