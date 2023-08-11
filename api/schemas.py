@@ -15,7 +15,7 @@ user_register_schema = AutoSchema(
         ),
         coreapi.Field(
             name="email",
-            required=True,
+            required=False,
             location="form",
             schema=coreschema.String(description="User email."),
             description="User email",
