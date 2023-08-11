@@ -41,7 +41,8 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
-    'DATE_FORMAT': "%Y-%m-%d",
+    "DATE_FORMAT": "%Y-%m-%d",
+    "DATE_INPUT_FORMAT": ["%Y-%m-%d"],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
