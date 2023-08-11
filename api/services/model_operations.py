@@ -31,3 +31,18 @@ def get_user_instance_data(pk: int) -> Optional[User]:
 def get_post_queryset() -> QuerySet:
     """Get Post model queryset."""
     return Post.objects.all()
+
+
+def get_users_number() -> int:
+    """Get users number."""
+    return User.objects.count()
+
+
+def get_posts_number() -> int:
+    """Get posts number."""
+    return Post.objects.count()
+
+
+def get_likes_number() -> int:
+    """Get likes number."""
+    return Like.objects.count()
