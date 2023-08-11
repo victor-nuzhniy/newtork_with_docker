@@ -156,3 +156,7 @@ class UserActivityView(APIView):
                     }
                 }
             )
+        return Response(
+            {"result": f"User with pk {pk} does not exist."},
+            status=status.HTTP_404_NOT_FOUND,
+        )
