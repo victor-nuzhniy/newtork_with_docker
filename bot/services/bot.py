@@ -4,7 +4,7 @@ from typing import Dict, List
 from faker import Faker
 
 from .config import Config
-from .handlers import register_user
+from .handlers import create_post, register_user
 
 fake = Faker(["en_US"])
 
@@ -40,3 +40,14 @@ class Bot:
             self.like_tasks[index] = likes_number
             self.posts_number += posts_number
             register_user(username, password)
+
+    def perform_post_tasks(self) -> None:
+        """Create posts in accordance with posts_task list."""
+        while self.post_tasks:
+            index: int = fake.random_choice(self.post_tasks)
+            token: str = self.user_tokens[index]
+            message: str = fake.pystr(min_chars=1, max_chars=255)
+            create_post(token, message)
+            self.post_tasks[index] -= 1
+            if self.post_tasks[index] == 0:
+                self.post_tasks.pop(index)
