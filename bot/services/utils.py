@@ -1,6 +1,7 @@
 """Module for bot utils."""
-from typing import Dict
+from typing import Dict, Optional
 
+import requests
 from yaml import load
 
 try:
@@ -13,3 +14,13 @@ def load_config_data_from_file(file_path: str) -> Dict:
     """Load config file data and create config data dict."""
     stream = open(file_path, mode="r")
     return load(stream, Loader)
+
+
+def make_request(
+    url: str, method: str, headers: Dict, data: Optional[Dict] = None
+) -> None:
+    """Request url with method, headers and data."""
+    headers.update({"Content-Type": "application/json"})
+    handler = getattr(requests, method.lower())
+    response = handler(url=url, headers=headers, json=data)
+    print(response)
