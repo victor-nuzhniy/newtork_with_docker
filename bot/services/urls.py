@@ -19,5 +19,9 @@ class Urls:
         """Get 'network' api post creation url."""
         return f"http://{self.host}/api/post/"
 
+    def get_like_create_url(self) -> str:
+        """Get 'network' api like creation url."""
+        return f"http://{self.host}/api/like/"
+
 
 urls = Urls()
