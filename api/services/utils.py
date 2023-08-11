@@ -2,6 +2,7 @@
 from datetime import datetime
 from typing import Dict, Optional, Tuple
 
+from django.utils.timezone import make_aware
 from pytz import utc
 
 
@@ -23,12 +24,12 @@ def process_date_input(query_params: Dict) -> Optional[Tuple]:
     Return converted values.
     """
     try:
-        date_from: datetime = datetime.now(utc).strptime(
+        date_from: datetime = datetime.strptime(
             query_params.get("date_from"), "%Y-%m-%d"
         )
-        date_to: datetime = datetime.now(utc).strptime(
-            query_params.get("date_to"), "%Y-%m-%d"
-        )
+        date_to: datetime = datetime.strptime(query_params.get("date_to"), "%Y-%m-%d")
+        date_from = make_aware(date_from, utc)
+        date_to = make_aware(date_to, utc)
     except ValueError:
         return None
     return date_from, date_to
