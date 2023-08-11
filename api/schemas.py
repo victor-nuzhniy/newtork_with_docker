@@ -75,3 +75,15 @@ analitics_schema = AutoSchema(
         ),
     ]
 )
+
+
+last_posts_schema = AutoSchema(
+    manual_fields=[
+        coreapi.Field(
+            name="posts_number",
+            required=True,
+            location="query",
+            schema=coreschema.Integer(description="Last posts number."),
+        ),
+    ]
+)

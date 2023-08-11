@@ -12,7 +12,12 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import User
-from .schemas import LikeSchema, analitics_schema, user_register_schema
+from .schemas import (
+    LikeSchema,
+    analitics_schema,
+    last_posts_schema,
+    user_register_schema,
+)
 from .serializers import LikeSerializer, PostSerializer, UserSerializer
 from .services.mixins import UpdateRequestFieldMixin
 from .services.model_operations import (
@@ -187,3 +192,19 @@ class StatisticView(APIView):
                 f"{posts_number}, likes - {likes_number}"
             }
         )
+
+
+class LastPostsView(generics.ListAPIView):
+    """Class for getting last n posts."""
+
+    permission_classes: List = [IsAdminUser]
+    authentication_classes: List = [JWTAuthentication]
+    serializer_class = PostSerializer
+    queryset = get_post_queryset()
+    schema = last_posts_schema
+
+    def get_queryset(self):
+        """Get queryset with Post instances."""
+        number: int = int(self.request.query_params.get("posts_number"))
+        queryset = super().get_queryset()
+        return queryset.order_by("-id")[:number]
