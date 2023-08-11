@@ -1,4 +1,5 @@
 """Module for bot functionality."""
+import random
 from typing import Dict, List
 
 from faker import Faker
@@ -22,7 +23,7 @@ class Bot:
         self.post_tasks: Dict = dict()
         self.like_tasks: Dict = dict()
         self.users_data: List = []
-        self.posts_number: int = 0
+        self.posts_ids: List = []
         self.user_tokens: List = []
 
     def create_users_and_tasks(self) -> None:
@@ -38,7 +39,6 @@ class Bot:
             self.users_data.append({"username": username, "password": password})
             self.post_tasks[index] = posts_number
             self.like_tasks[index] = likes_number
-            self.posts_number += posts_number
             register_user(username, password)
 
     def get_users_tokens(self) -> None:
@@ -50,10 +50,12 @@ class Bot:
     def perform_post_tasks(self) -> None:
         """Create posts in accordance with posts_task list."""
         while self.post_tasks:
-            index: int = fake.random_choice(self.post_tasks)
-            token: str = self.user_tokens[index]
+            index: int = random.choice(list(self.post_tasks.keys()))
+            token: str = self.user_tokens[index].get("access")
             message: str = fake.pystr(min_chars=1, max_chars=255)
-            create_post(token, message)
+            result = create_post(token, message)
+            if result:
+                self.posts_ids.append(result.get("id", 1))
             self.post_tasks[index] -= 1
             if self.post_tasks[index] == 0:
                 self.post_tasks.pop(index)

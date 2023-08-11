@@ -18,7 +18,7 @@ def load_config_data_from_file(file_path: str) -> Dict:
 
 def make_request(
     url: str, method: str, headers: Dict, data: Optional[Dict] = None
-) -> Dict:
+) -> Optional[Dict]:
     """Request url with method, headers and data."""
     headers.update({"Content-Type": "application/json"})
     handler = getattr(requests, method.lower())

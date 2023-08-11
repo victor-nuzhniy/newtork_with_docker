@@ -1,5 +1,5 @@
 """Module for bot handlers."""
-from typing import Dict
+from typing import Dict, Optional
 
 from .urls import urls
 from .utils import make_request
@@ -22,10 +22,10 @@ def get_user_tokens(user_data: Dict) -> Dict:
     return make_request(url, method, headers, user_data)
 
 
-def create_post(token: str, message: str) -> None:
+def create_post(token: str, message: str) -> Optional[Dict]:
     """Create post by user."""
     url: str = urls.get_post_create_url()
     method: str = "post"
     headers: Dict = {"Authorization": f"Bearer {token}"}
     data: Dict = {"message": message}
-    make_request(url, method, headers, data)
+    return make_request(url, method, headers, data)
