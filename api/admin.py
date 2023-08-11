@@ -9,7 +9,7 @@ from .models import Like, Post, User
 class CustomUserAdmin(UserAdmin):
     """Customized UserAdmin class with additional fields."""
 
-    list_display = ("username", "email", "is_staff")
+    list_display = ("id", "username", "email", "is_staff")
     search_fields = ("username", "email")
     readonly_fields = ("last_request_at",)
     fieldsets = (
