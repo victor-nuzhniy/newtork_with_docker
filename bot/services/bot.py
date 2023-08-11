@@ -4,7 +4,7 @@ from typing import Dict, List
 from faker import Faker
 
 from .config import Config
-from .handlers import create_post, register_user
+from .handlers import create_post, get_user_tokens, register_user
 
 fake = Faker(["en_US"])
 
@@ -40,6 +40,12 @@ class Bot:
             self.like_tasks[index] = likes_number
             self.posts_number += posts_number
             register_user(username, password)
+
+    def get_users_tokens(self) -> None:
+        """Fetch user access token from 'network' api."""
+        for data in self.users_data:
+            token_data: Dict = get_user_tokens(data)
+            self.user_tokens.append(token_data)
 
     def perform_post_tasks(self) -> None:
         """Create posts in accordance with posts_task list."""
