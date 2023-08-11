@@ -18,8 +18,11 @@ from .services.mixins import UpdateRequestFieldMixin
 from .services.model_operations import (
     get_analitic_like_queryset,
     get_like_instance,
+    get_likes_number,
     get_post_queryset,
+    get_posts_number,
     get_user_instance_data,
+    get_users_number,
 )
 from .services.utils import get_like, process_date_input
 
@@ -159,4 +162,28 @@ class UserActivityView(APIView):
         return Response(
             {"result": f"User with pk {pk} does not exist."},
             status=status.HTTP_404_NOT_FOUND,
+        )
+
+
+class StatisticView(APIView):
+    """Class for fetching statistic data."""
+
+    permission_classes: List = [IsAdminUser]
+    authentication_classes: List = [JWTAuthentication]
+
+    @staticmethod
+    def get(request: Request) -> Response:
+        """
+        Get user, post and like quantity.
+
+        This endpoint only for admin user.
+        """
+        users_number: int = get_users_number()
+        posts_number: int = get_posts_number()
+        likes_number: int = get_likes_number()
+        return Response(
+            {
+                "statistic data": f"Users - {users_number}, posts - "
+                f"{posts_number}, likes - {likes_number}"
+            }
         )

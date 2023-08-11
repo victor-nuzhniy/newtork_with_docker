@@ -7,6 +7,7 @@ from .views import (
     LikeView,
     PostCreateView,
     RegisterView,
+    StatisticView,
     UserActivityView,
 )
 
@@ -18,4 +19,5 @@ urlpatterns = [
     path("like/", LikeView.as_view(), name="like"),
     path("analitics/", AnaliticView.as_view(), name="analitics"),
     path("activity/<int:pk>/", UserActivityView.as_view(), name="activity"),
+    path("statistic/", StatisticView.as_view(), name="statistic"),
 ]
