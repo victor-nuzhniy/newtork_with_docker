@@ -14,6 +14,14 @@ def register_user(username: str, password: str) -> None:
     make_request(url, method, headers, data)
 
 
+def get_user_tokens(user_data: Dict) -> Dict:
+    """Get user tokens from 'network' api."""
+    url: str = urls.get_tokens_url()
+    method: str = "post"
+    headers: Dict = dict()
+    return make_request(url, method, headers, user_data)
+
+
 def create_post(token: str, message: str) -> None:
     """Create post by user."""
     url: str = urls.get_post_create_url()
