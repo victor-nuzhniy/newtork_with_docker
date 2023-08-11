@@ -11,6 +11,10 @@ class Urls:
         """Get 'network' api signup user url."""
         return f"http://{self.host}/api/signup/"
 
+    def get_tokens_url(self) -> str:
+        """Get 'network' api token obtain url."""
+        return f"http://{self.host}/api/token/"
+
     def get_post_create_url(self) -> str:
         """Get 'network' api post creation url."""
         return f"http://{self.host}/api/post/"
