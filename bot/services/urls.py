@@ -11,5 +11,9 @@ class Urls:
         """Get 'network' api signup user url."""
         return f"http://{self.host}/api/signup/"
 
+    def get_post_create_url(self) -> str:
+        """Get 'network' api post creation url."""
+        return f"http://{self.host}/api/post/"
+
 
 urls = Urls()
