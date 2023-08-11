@@ -29,3 +29,12 @@ def create_post(token: str, message: str) -> Optional[Dict]:
     headers: Dict = {"Authorization": f"Bearer {token}"}
     data: Dict = {"message": message}
     return make_request(url, method, headers, data)
+
+
+def create_like(token: str, message_id: int, like: str) -> None:
+    """Create like by user."""
+    url: str = urls.get_like_create_url()
+    method: str = "post"
+    headers: Dict = {"Authorization": f"Bearer {token}"}
+    data: Dict = {"message_id": message_id, "eval": like}
+    make_request(url, method, headers, data)
