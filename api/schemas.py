@@ -87,3 +87,15 @@ last_posts_schema = AutoSchema(
         ),
     ]
 )
+
+
+last_likes_schema = AutoSchema(
+    manual_fields=[
+        coreapi.Field(
+            name="likes_number",
+            required=True,
+            location="query",
+            schema=coreschema.Integer(description="Last likes number."),
+        ),
+    ]
+)
