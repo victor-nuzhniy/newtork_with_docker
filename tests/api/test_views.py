@@ -9,6 +9,11 @@ from django.urls import reverse
 from faker import Faker
 
 from api.models import Like, Post, User
+from api.services.model_operations import (
+    get_likes_number,
+    get_posts_number,
+    get_users_number,
+)
 from tests.api.factories import LikeFactory, PostFactory, UserFactory
 
 
@@ -53,10 +58,15 @@ class TestPostCreateView:
     pytestmark = pytest.mark.django_db
 
     def test_post_create_view(
-        self, client: Client, faker: Faker, get_authorized_user_data: Tuple[User, Dict]
+        self,
+        client: Client,
+        faker: Faker,
+        get_authorized_admin_user_data: Tuple[User, Dict],
     ) -> None:
         """Test PostCreateView."""
-        user, headers = get_authorized_user_data
+        user, headers = get_authorized_admin_user_data
+        user.is_staff = False
+        user.save()
         url: str = reverse("create_post")
         message: str = faker.pystr(min_chars=1, max_chars=255)
         response = client.post(url, headers=headers, data={"message": message})
@@ -68,20 +78,30 @@ class TestPostCreateView:
         assert result_message.message == message
 
     def test_post_create_view_empty_message(
-        self, client: Client, faker: Faker, get_authorized_user_data: Tuple[User, Dict]
+        self,
+        client: Client,
+        faker: Faker,
+        get_authorized_admin_user_data: Tuple[User, Dict],
     ) -> None:
         """Test PostCreateView. Empty message."""
-        user, headers = get_authorized_user_data
+        user, headers = get_authorized_admin_user_data
+        user.is_staff = False
+        user.save()
         url: str = reverse("create_post")
         message: str = ""
         response = client.post(url, headers=headers, data={"message": message})
         assert response.status_code == 400
 
     def test_post_create_view_empty_message_unauthorized(
-        self, client: Client, faker: Faker, get_authorized_user_data: Tuple[User, Dict]
+        self,
+        client: Client,
+        faker: Faker,
+        get_authorized_admin_user_data: Tuple[User, Dict],
     ) -> None:
         """Test PostCreateView. Unauthorized."""
-        user, headers = get_authorized_user_data
+        user, headers = get_authorized_admin_user_data
+        user.is_staff = False
+        user.save()
         headers["Authorization"] += "1"
         url: str = reverse("create_post")
         message: str = "erw"
@@ -96,10 +116,15 @@ class TestLikeView:
     pytestmark = pytest.mark.django_db
 
     def test_like_view_post_method(
-        self, client: Client, faker: Faker, get_authorized_user_data: Tuple[User, Dict]
+        self,
+        client: Client,
+        faker: Faker,
+        get_authorized_admin_user_data: Tuple[User, Dict],
     ) -> None:
         """Test LikeView post method."""
-        user, headers = get_authorized_user_data
+        user, headers = get_authorized_admin_user_data
+        user.is_staff = False
+        user.save()
         url: str = reverse("like")
         post: Post = PostFactory()
         response = client.post(
@@ -112,10 +137,15 @@ class TestLikeView:
         assert result.get("message") == post.pk
 
     def test_like_view_post_method_message_id_not_exist(
-        self, client: Client, faker: Faker, get_authorized_user_data: Tuple[User, Dict]
+        self,
+        client: Client,
+        faker: Faker,
+        get_authorized_admin_user_data: Tuple[User, Dict],
     ) -> None:
         """Test LikeView post method. Message id isn't exist."""
-        user, headers = get_authorized_user_data
+        user, headers = get_authorized_admin_user_data
+        user.is_staff = False
+        user.save()
         url: str = reverse("like")
         response = client.post(
             url,
@@ -125,10 +155,15 @@ class TestLikeView:
         assert response.status_code == 400
 
     def test_like_view_post_method_invalid_input(
-        self, client: Client, faker: Faker, get_authorized_user_data: Tuple[User, Dict]
+        self,
+        client: Client,
+        faker: Faker,
+        get_authorized_admin_user_data: Tuple[User, Dict],
     ) -> None:
         """Test LikeView post method. Input is invalid."""
-        user, headers = get_authorized_user_data
+        user, headers = get_authorized_admin_user_data
+        user.is_staff = False
+        user.save()
         url: str = reverse("like")
         post: Post = PostFactory()
         response = client.post(
@@ -139,10 +174,15 @@ class TestLikeView:
         assert result.get("result") == "Invalid input data."
 
     def test_like_view_post_method_unauthorized(
-        self, client: Client, faker: Faker, get_authorized_user_data: Tuple[User, Dict]
+        self,
+        client: Client,
+        faker: Faker,
+        get_authorized_admin_user_data: Tuple[User, Dict],
     ) -> None:
         """Test LikeView post method. Unauthorized."""
-        user, headers = get_authorized_user_data
+        user, headers = get_authorized_admin_user_data
+        user.is_staff = False
+        user.save()
         headers["Authorization"] += "1"
         url: str = reverse("like")
         response = client.post(
@@ -154,10 +194,12 @@ class TestLikeView:
         self,
         client: Client,
         faker: Faker,
-        get_authorized_user_data: Tuple[User, Dict],
+        get_authorized_admin_user_data: Tuple[User, Dict],
     ) -> None:
         """Test LikeView delete method."""
-        user, headers = get_authorized_user_data
+        user, headers = get_authorized_admin_user_data
+        user.is_staff = False
+        user.save()
         url: str = reverse("like")
         headers.update({"content-type": "application/json"})
         post: Post = PostFactory()
@@ -174,10 +216,12 @@ class TestLikeView:
         self,
         client: Client,
         faker: Faker,
-        get_authorized_user_data: Tuple[User, Dict],
+        get_authorized_admin_user_data: Tuple[User, Dict],
     ) -> None:
         """Test LikeView delete method. Like is not exist."""
-        user, headers = get_authorized_user_data
+        user, headers = get_authorized_admin_user_data
+        user.is_staff = False
+        user.save()
         url: str = reverse("like")
         headers.update({"content-type": "application/json"})
         post: Post = PostFactory()
@@ -202,14 +246,16 @@ class TestAnaliticView:
         client: Client,
         faker: Faker,
         get_like_data_for_analitic: Tuple[List, List],
-        get_authorized_user_data: Tuple[User, Dict],
+        get_authorized_admin_user_data: Tuple[User, Dict],
     ) -> None:
         """Test AnaliticView."""
         dates, numbers = get_like_data_for_analitic
+
         number = len(dates)
 
-        user, headers = get_authorized_user_data
-
+        user, headers = get_authorized_admin_user_data
+        user.is_staff = False
+        user.save()
         date_from: str = datetime.strftime(dates[0] - timedelta(days=1), "%Y-%m-%d")
         date_to: str = datetime.strftime(dates[-1] + timedelta(days=1), "%Y-%m-%d")
         url = reverse("analitics")
@@ -221,3 +267,118 @@ class TestAnaliticView:
         for i, item in enumerate(result):
             assert item.get("date") == dates[number - i - 1]
             assert item.get("likes") == numbers[number - i - 1]
+
+    def test_analitic_view_invalid_input(
+        self,
+        client: Client,
+        faker: Faker,
+        get_authorized_admin_user_data: Tuple[User, Dict],
+    ) -> None:
+        """Test AnaliticView. Invalid input."""
+        user, headers = get_authorized_admin_user_data
+        user.is_staff = False
+        user.save()
+        date_from: str = "134443"
+        date_to: str = "13334"
+        url = reverse("analitics")
+        response = client.get(
+            url, headers=headers, data={"date_from": date_from, "date_to": date_to}
+        )
+        result = response.json().get("result")
+        assert response.status_code == 406
+        assert result == "Invalid input format."
+
+    def test_analitic_view_unauthorized(
+        self,
+        client: Client,
+        faker: Faker,
+    ) -> None:
+        """Test AnaliticView. Invalid input."""
+        date_from: str = "134443"
+        date_to: str = "13334"
+        url = reverse("analitics")
+        response = client.get(url, data={"date_from": date_from, "date_to": date_to})
+        assert response.status_code == 401
+
+
+@pytest.mark.django_db
+class TestUserActivityView:
+    """Class for testing UserActivityView."""
+
+    pytestmark = pytest.mark.django_db
+
+    def test_user_activity_view(
+        self,
+        client: Client,
+        faker: Faker,
+        get_authorized_admin_user_data: Tuple[User, Dict],
+    ) -> None:
+        """Test UserActivityView."""
+        user, headers = get_authorized_admin_user_data
+        test_user: User = UserFactory()
+        test_user.save()
+        url = reverse("activity", kwargs={"pk": test_user.pk})
+        response = client.get(url, headers=headers)
+        result = response.json().get("activity")
+        assert response.status_code == 200
+        assert result.get("last_login", "") is None
+        assert (
+            result.get("last_request_at")
+            == test_user.last_request_at.isoformat()[:-6] + "Z"
+        )
+
+    def test_user_activity_view_does_not_exist(
+        self,
+        client: Client,
+        faker: Faker,
+        get_authorized_admin_user_data: Tuple[User, Dict],
+    ) -> None:
+        """Test UserActivityView."""
+        user, headers = get_authorized_admin_user_data
+        url = reverse("activity", kwargs={"pk": 900})
+        response = client.get(url, headers=headers)
+        result = response.json().get("result")
+        assert response.status_code == 404
+        assert result == "User with pk 900 does not exist."
+
+
+@pytest.mark.django_db
+class TestStatisticView:
+    """Class for testing StatisticView."""
+
+    pytestmark = pytest.mark.django_db
+
+    def test_statistic_view(
+        self,
+        faker: Faker,
+        client: Client,
+        get_authorized_admin_user_data: Tuple[User, Dict],
+    ) -> None:
+        """Test StatisticView."""
+        user, headers = get_authorized_admin_user_data
+        number: int = faker.random_int(min=4, max=8)
+        for i in range(number):
+            user: User = UserFactory()
+            LikeFactory.create_batch(size=number, user=user)
+        users_number = get_users_number()
+        posts_number = get_posts_number()
+        likes_number = get_likes_number()
+        url = reverse("statistic")
+        response = client.get(url, headers=headers)
+        result = response.json().get("statistic data")
+        assert response.status_code == 200
+        assert (
+            result
+            == f"Users - {users_number}, posts - {posts_number}, likes - {likes_number}"
+        )
+
+
+@pytest.mark.django_db
+class TestLastPostView:
+    """Class for testing LastPostView."""
+
+    pytestmark = pytest.mark.django_db
+
+    def test_last_post_view(self) -> None:
+        """Test LastPostView."""
+        pass

@@ -33,7 +33,7 @@ def get_like_data_for_analitic(faker: Faker, freezer: freezegun) -> Tuple[List, 
 
 
 @pytest.fixture
-def get_authorized_user_data(
+def get_authorized_admin_user_data(
     faker: Faker, django_user_model: User, client: Client
 ) -> Tuple[User, Dict]:
     """Create and get authorized user data for testing."""
