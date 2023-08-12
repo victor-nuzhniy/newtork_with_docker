@@ -155,6 +155,7 @@ class UserActivityView(APIView):
         Get user last_login and last_request_at data.
 
         Path parameter 'pk' - user pk to look activity at.
+        Only for admin users.
         """
         user: User = get_user_instance_data(pk)
         if user:
@@ -206,7 +207,7 @@ class LastPostsView(generics.ListAPIView):
     schema = last_posts_schema
 
     def get_queryset(self):
-        """Get queryset with Post instances."""
+        """Get queryset with Post instances. Only for admin users."""
         number: int = int(self.request.query_params.get("posts_number"))
         queryset = super().get_queryset()
         return queryset.order_by("-id")[:number]
@@ -222,7 +223,7 @@ class LastLikesView(generics.ListAPIView):
     schema = last_likes_schema
 
     def get_queryset(self):
-        """Get queryset with Like instances."""
+        """Get queryset with Like instances. Only for admin users."""
         number: int = int(self.request.query_params.get("likes_number"))
         queryset = super().get_queryset()
         return queryset.order_by("-id")[:number]
