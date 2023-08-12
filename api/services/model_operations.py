@@ -46,3 +46,8 @@ def get_posts_number() -> int:
 def get_likes_number() -> int:
     """Get likes number."""
     return Like.objects.count()
+
+
+def get_likes_queryset() -> QuerySet:
+    """Get likes queryset."""
+    return Like.objects.all()
