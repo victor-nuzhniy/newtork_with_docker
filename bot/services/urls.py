@@ -9,11 +9,11 @@ class Urls:
 
     def get_signup_user_url(self) -> str:
         """Get 'network' api signup user url."""
-        return f"http://{self.host}/api/signup/"
+        return f"http://{self.host}/api/auth/signup/"
 
     def get_tokens_url(self) -> str:
         """Get 'network' api token obtain url."""
-        return f"http://{self.host}/api/token/"
+        return f"http://{self.host}/api/auth/token/"
 
     def get_post_create_url(self) -> str:
         """Get 'network' api post creation url."""
