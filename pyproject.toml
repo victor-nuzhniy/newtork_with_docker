@@ -70,8 +70,8 @@ skip_glob = []
 [tool.pytest.ini_options]
 # === Pytest ===
 DJANGO_SETTINGS_MODULE = "tests.settings"
-pythonpath = [".", "portfolio"]
-norecursedirs = ["env", ".env", ".env", "migrations", "venv"]
+pythonpath = [".", "api"]
+norecursedirs = ["env", ".env", "migrations", "venv"]
 testpaths = ["tests",]
 console_output_style = "progress"
 python_files = "test_*"
