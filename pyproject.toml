@@ -38,6 +38,7 @@ pytest-clarity = "^1.0.1"
 faker = "^19.3.0"
 pytest-django = "^4.5.2"
 factory-boy = "^3.3.0"
+pytest-freezegun = "^0.4.2"
 
 [build-system]
 requires = ["poetry-core"]
