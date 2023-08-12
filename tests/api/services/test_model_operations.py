@@ -1,6 +1,6 @@
 """Module fot testing services model_operations."""
 from datetime import date, datetime, timedelta
-from typing import List, Optional
+from typing import List, Tuple
 
 import freezegun
 import pytest
@@ -56,19 +56,14 @@ class TestGetAnaliticLikeQuerySet:
         assert result[0].get("likes") == number
 
     def test_get_analitic_like_queryset_many_days(
-        self, faker: Faker, freezer: freezegun
+        self,
+        faker: Faker,
+        freezer: freezegun,
+        get_like_data_for_analitic: Tuple[List, List],
     ) -> None:
         """Test get_analitic_like_queryset. Many days."""
-        number: int = faker.random_int(min=3, max=10)
-        dates: List[Optional[datetime]] = []
-        numbers: List[Optional[int]] = []
-        for i in range(number):
-            dates.append(datetime.today() - timedelta(days=number - i))
-            numbers.append(faker.random_int(min=3, max=10))
-            freezer.move_to(dates[-1].strftime("%Y-%m-%d"))
-            user: User = UserFactory()
-            post: Post = PostFactory()
-            LikeFactory.create_batch(size=numbers[-1], user=user, message=post)
+        dates, numbers = get_like_data_for_analitic
+        number = len(dates)
         result = get_analitic_like_queryset(
             (dates[0] - timedelta(days=1), dates[-1] + timedelta(days=1))
         )
