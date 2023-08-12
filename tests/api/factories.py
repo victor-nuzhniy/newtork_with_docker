@@ -13,11 +13,13 @@ class UserFactory(BaseModelFactory):
 
         model = User
         exclude = ("post_set", "like_set")
+        skip_postgeneration_save = True
 
     username = factory.Faker("user_name")
     email = factory.Faker("email")
     is_staff = factory.Faker("pybool")
     is_active = factory.Faker("pybool")
+    password = factory.django.Password("pw")
     post_set = factory.RelatedFactoryList(
         factory="tests.api.factories.PostFactory",
         factory_related_name="post_set",
@@ -39,6 +41,7 @@ class PostFactory(BaseModelFactory):
         model = Post
         django_get_or_create = ("user",)
         exclude = ("like_set",)
+        skip_postgeneration_save = True
 
     user = factory.SubFactory(UserFactory)
     message = factory.Faker("pystr", min_chars=1, max_chars=255)
