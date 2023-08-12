@@ -56,3 +56,14 @@ There is need to always check amount of test cases and their covering.
 1. To perform created test cases, use command:
 
        pytest --cov
+
+## Bot
+
+### Usage
+
+1. To run bot use command from project folder
+    python bot/run_bot.py
+
+2. Bot config data is in bot/config.yaml. Number of users and other values can be changed.
+
+3. Config host now is localhost, but can be changed in case of testing deployed project.
