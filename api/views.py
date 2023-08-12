@@ -15,6 +15,7 @@ from .models import User
 from .schemas import (
     LikeSchema,
     analitics_schema,
+    last_likes_schema,
     last_posts_schema,
     user_register_schema,
 )
@@ -24,6 +25,7 @@ from .services.model_operations import (
     get_analitic_like_queryset,
     get_like_instance,
     get_likes_number,
+    get_likes_queryset,
     get_post_queryset,
     get_posts_number,
     get_user_instance_data,
@@ -206,5 +208,21 @@ class LastPostsView(generics.ListAPIView):
     def get_queryset(self):
         """Get queryset with Post instances."""
         number: int = int(self.request.query_params.get("posts_number"))
+        queryset = super().get_queryset()
+        return queryset.order_by("-id")[:number]
+
+
+class LastLikesView(generics.ListAPIView):
+    """Class for getting last n likes."""
+
+    permission_classes: List = [IsAdminUser]
+    authentication_classes: List = [JWTAuthentication]
+    serializer_class = LikeSerializer
+    queryset = get_likes_queryset()
+    schema = last_likes_schema
+
+    def get_queryset(self):
+        """Get queryset with Like instances."""
+        number: int = int(self.request.query_params.get("likes_number"))
         queryset = super().get_queryset()
         return queryset.order_by("-id")[:number]

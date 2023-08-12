@@ -4,6 +4,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from .views import (
     AnaliticView,
+    LastLikesView,
     LastPostsView,
     LikeView,
     PostCreateView,
@@ -22,4 +23,5 @@ urlpatterns = [
     path("activity/<int:pk>/", UserActivityView.as_view(), name="activity"),
     path("statistic/", StatisticView.as_view(), name="statistic"),
     path("post/last/", LastPostsView.as_view(), name="last_posts"),
+    path("like/last/", LastLikesView.as_view(), name="last_likes"),
 ]
