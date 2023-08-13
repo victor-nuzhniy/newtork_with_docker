@@ -374,11 +374,65 @@ class TestStatisticView:
 
 
 @pytest.mark.django_db
-class TestLastPostView:
+class TestLastPostsView:
     """Class for testing LastPostView."""
 
     pytestmark = pytest.mark.django_db
 
-    def test_last_post_view(self) -> None:
+    def test_last_posts_view(
+        self,
+        faker: Faker,
+        client: Client,
+        get_authorized_admin_user_data: Tuple[User, Dict],
+    ) -> None:
         """Test LastPostView."""
-        pass
+        user, headers = get_authorized_admin_user_data
+        url = reverse("last_posts")
+        number: int = faker.random_int(min=5, max=10)
+        posts: List[Post] = PostFactory.create_batch(size=number)
+        response = client.get(url, headers=headers, data={"posts_number": number - 2})
+        result = response.json()
+        assert response.status_code == 200
+        for i, item in enumerate(result):
+            assert item.get("id") == posts[number - i - 1].pk
+            assert item.get("user") == posts[number - i - 1].user.pk
+            assert item.get("message") == posts[number - i - 1].message
+            assert (
+                item.get("created_at")
+                == posts[number - i - 1].created_at.isoformat()[:-6] + "Z"
+            )
+            assert (
+                item.get("updated_at")
+                == posts[number - i - 1].updated_at.isoformat()[:-6] + "Z"
+            )
+
+
+@pytest.mark.django_db
+class TestLastLikesView:
+    """Class for testing LastLikesView."""
+
+    pytestmark = pytest.mark.django_db
+
+    def test_last_likes_view(
+        self,
+        faker: Faker,
+        client: Client,
+        get_authorized_admin_user_data: Tuple[User, Dict],
+    ) -> None:
+        """Test LastLikesView."""
+        user, headers = get_authorized_admin_user_data
+        url = reverse("last_likes")
+        number: int = faker.random_int(min=5, max=10)
+        user: User = UserFactory()
+        likes: List[Like] = LikeFactory.create_batch(size=number, user=user)
+        response = client.get(url, headers=headers, data={"likes_number": number - 2})
+        result = response.json()
+        assert response.status_code == 200
+        for i, item in enumerate(result):
+            assert item.get("user") == likes[number - i - 1].user.pk
+            assert item.get("message") == likes[number - i - 1].message.pk
+            assert item.get("eval") == likes[number - i - 1].eval
+            assert (
+                item.get("created_at")
+                == likes[number - i - 1].created_at.isoformat()[:-6] + "Z"
+            )
