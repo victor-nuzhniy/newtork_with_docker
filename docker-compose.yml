@@ -2,8 +2,8 @@ version: '1'
 
 services:
   postgres:
-    image: 'postgres:latest'
-    container_name: social_network
+    image: 'postgres:12.16-alpine3.18'
+    container_name: network-api
     env_file:
       - .env  # must define POSTGRES_USER, POSTGRES_PASSWORD and POSTGRES_DB
     volumes:
