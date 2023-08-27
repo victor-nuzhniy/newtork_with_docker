@@ -17,6 +17,7 @@ services:
     command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ./:/usr/src/app/
+      - static:/usr/src/app/static
 #    ports:
 #      - '8000:8000'
     expose:
@@ -33,7 +34,9 @@ services:
       - '80:80'
     volumes:
       - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - static:/home/app/static
 
 
 volumes:
   database-data:
+  static:
