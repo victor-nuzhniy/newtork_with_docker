@@ -16,7 +16,7 @@ done
 
 echo "Run collectstatic command."
 
-while ! python manage.py collectstatic 2>&1; do
+while ! python manage.py collectstatic --noinput 2>&1; do
   echo "Collectstatic in progress."
   sleep 3
 done
