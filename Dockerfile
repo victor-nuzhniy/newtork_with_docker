@@ -22,3 +22,6 @@ RUN poetry install
 COPY api api/
 COPY config config/
 COPY manage.py ./
+COPY --chmod=0755 docker-entrypoint.sh ./
+
+ENTRYPOINT [ "/bin/sh", "docker-entrypoint.sh" ]
